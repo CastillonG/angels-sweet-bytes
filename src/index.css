@@ -2,41 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+/* Angel's Desserts Design System
+Brand colors: #D9C7B5 (beige), #EDE1CC (cream), #C8996F (golden-brown), #84523D (brown), #3A2521 (dark cocoa)
+Typography: Playfair Display for headings, Poppins for body
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Brand Color Palette */
+    --cream: 42 42% 85%; /* #EDE1CC */
+    --beige: 33 29% 73%; /* #D9C7B5 */
+    --golden: 33 50% 62%; /* #C8996F */
+    --brown: 25 39% 38%; /* #84523D */
+    --dark-cocoa: 20 27% 18%; /* #3A2521 */
+    
+    /* Semantic Design Tokens */
+    --background: var(--cream);
+    --foreground: var(--dark-cocoa);
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: var(--dark-cocoa);
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: var(--dark-cocoa);
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: var(--brown);
+    --primary-foreground: var(--cream);
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: var(--beige);
+    --secondary-foreground: var(--dark-cocoa);
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: var(--beige);
+    --muted-foreground: var(--brown);
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: var(--golden);
+    --accent-foreground: var(--dark-cocoa);
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: var(--beige);
+    --input: 0 0% 100%;
+    --ring: var(--golden);
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+    
+    /* Custom Design Tokens */
+    --gradient-warm: linear-gradient(135deg, hsl(var(--golden)), hsl(var(--brown)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--cream)), hsl(var(--beige)));
+    --shadow-soft: 0 4px 20px hsl(var(--brown) / 0.1);
+    --shadow-card: 0 8px 30px hsl(var(--brown) / 0.15);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
 
