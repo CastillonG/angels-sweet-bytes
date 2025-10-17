@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, ShoppingCart } from "lucide-react";
 import { useCart } from "@/hooks/use-cart";
-import logoImage from "@/assets/logo.png";
+// Use the public folder for the logo (place `logo.png` in the `public/` directory)
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,7 +29,7 @@ const Navigation = () => {
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-3">
-          <img src={logoImage} alt="Angel's Desserts Logo" className="h-10 w-10" />
+          <img src="/logo.png" alt="Angel's Desserts Logo" className="h-10 w-10" />
           <span className="font-playfair font-bold text-xl text-foreground">Angel's Desserts</span>
         </Link>
 

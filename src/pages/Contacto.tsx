@@ -31,22 +31,59 @@ const Contacto = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSending, setIsSending] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Here you would send to your email endpoint
-    toast({
-      title: "Mensaje enviado",
-      description: "Hemos recibido tu mensaje. Te responderemos pronto.",
-    });
-    
-    setFormData({
-      nombre: "",
-      email: "",
-      telefono: "",
-      asunto: "",
-      mensaje: ""
-    });
+    if (isSending) return;
+    setIsSending(true);
+
+    const apiKey = import.meta.env.VITE_AIRTABLE_API_KEY as string | undefined;
+    const baseId = import.meta.env.VITE_AIRTABLE_BASE_ID as string | undefined;
+    const tableId = import.meta.env.VITE_AIRTABLE_TABLE_ID as string | undefined;
+
+    if (!apiKey || !baseId || !tableId) {
+      toast({ title: "Configuración faltante", description: "No se ha configurado Airtable.", variant: 'destructive' });
+      setIsSending(false);
+      return;
+    }
+
+    const url = `https://api.airtable.com/v0/${baseId}/${tableId}`;
+
+    try {
+      const payload = {
+        fields: {
+          "Nombre": formData.nombre,
+          "Correo": formData.email,
+          "No. De Telefono": formData.telefono,
+          "Asunto": formData.asunto,
+          "Mensaje": formData.mensaje,
+        }
+      };
+
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        console.error('Airtable error:', text);
+        throw new Error('Error enviando a Airtable');
+      }
+
+      toast({ title: "Mensaje enviado", description: "Hemos recibido tu mensaje. Te responderemos pronto." });
+      setFormData({ nombre: "", email: "", telefono: "", asunto: "", mensaje: "" });
+    } catch (err) {
+      console.error(err);
+      toast({ title: "Error al enviar", description: "No se pudo enviar el mensaje. Intenta más tarde.", variant: 'destructive' });
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const openWhatsApp = () => {
@@ -265,13 +302,34 @@ const Contacto = () => {
                 <CardTitle className="font-playfair">Nuestra Ubicación</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="aspect-video bg-gradient-hero rounded-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <MapPin className="h-12 w-12 text-accent mx-auto mb-4" />
-                    <p className="font-poppins font-medium text-foreground">Mapa interactivo</p>
-                    <p className="font-poppins text-sm text-muted-foreground">
-                      Hermosillo, Sonora, México
-                    </p>
+                <div className="rounded-lg overflow-hidden">
+                  <iframe
+                    title="Mapa de Hermosillo - Montecarlo"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12932.400545120923!2d-111.01703280648496!3d29.06465054638328!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86ce8478856ea921%3A0x76d88b8020d33c84!2sMontecarlo%2C%2083288%20Hermosillo%2C%20Son.!5e1!3m2!1ses!2smx!4v1760669162196!5m2!1ses!2smx"
+                    width="100%"
+                    height="450"
+                    style={{ border: 0 }}
+                    allowFullScreen={true}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+
+                  <div className="mt-3 flex gap-3">
+                    <Button
+                      asChild
+                      variant="outline"
+                    >
+                      <a
+                        href="https://www.google.com/maps/search/?api=1&query=Hermosillo%2C+Sonora%2C+Mexico"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Abrir en Google Maps
+                      </a>
+                    </Button>
+                    <Button onClick={() => window.open('https://www.google.com/maps/search/?api=1&query=Hermosillo%2C+Sonora%2C+Mexico', '_blank')} className="hidden sm:inline-block">
+                      Ver en nueva pestaña
+                    </Button>
                   </div>
                 </div>
               </CardContent>
